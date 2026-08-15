@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Forgeric version profile",
+  "description": "Everything that varies between Minecraft versions. Adding support for a new version should mean adding one of these files, not editing Java.",
+  "type": "object",
+  "required": ["profileVersion", "minecraft", "javaMajor", "obfuscated", "neoforge", "fabric"],
+  "properties": {
+    "profileVersion": {
+      "type": "integer",
+      "description": "Schema version of this file itself, so the installer can reject formats it predates.",
+      "const": 1
+    },
+    "minecraft": {
+      "type": "string",
+      "description": "Minecraft version id exactly as Mojang publishes it, e.g. \"26.2\" or \"1.21.1\"."
+    },
+    "javaMajor": {
+      "type": "integer",
+      "description": "Java major version this Minecraft build requires."
+    },
+    "obfuscated": {
+      "type": "boolean",
+      "description": "True when Mojang still publishes client_mappings for this version. Forgeric has no runtime remapper, so the installer refuses obfuscated versions. This is the single flag that decides whether the bridge can work at all."
+    },
+    "neoforge": {
+      "type": "object",
+      "required": ["version"],
+      "properties": {
+        "version": { "type": "string" },
+        "maven": { "type": "string", "format": "uri" },
+        "installerArtifact": { "type": "string" },
+        "mainClass": { "type": "string" }
+      }
+    },
+    "fabric": {
+      "type": "object",
+      "required": ["loader"],
+      "properties": {
+        "loader": { "type": "string" },
+        "maven": { "type": "string", "format": "uri" },
+        "meta": { "type": "string", "format": "uri" },
+        "intermediary": {
+          "type": ["string", "null"],
+          "description": "Intermediary mapping version, or null when the game needs no mappings. Non-null implies obfuscated and therefore unsupported for now."
+        }
+      }
+    },
+    "compat": {
+      "type": "object",
+      "description": "Library versions both loaders must agree on. The bridge ships no Mixin or ASM of its own and relies on a single shared runtime; if these ever diverge between the two loaders, the profile is not usable as-is.",
+      "properties": {
+        "mixin": { "type": "string" },
+        "asm": { "type": "string" }
+      }
+    },
+    "forgeric": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string" },
+        "loaderArtifact": { "type": "string" }
+      }
+    },
+    "supported": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["alpha", "beta", "stable", "untested", "unsupported", "unknown"]
+        },
+        "fabricApi": {
+          "type": "boolean",
+          "description": "Whether the Fabric API bridge exists for this version. While false, Fabric mods depending on fabric-api will not load."
+        }
+      }
+    }
+  }
+}
