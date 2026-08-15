@@ -146,8 +146,13 @@ public final class ForgericInstaller {
                     ? ""
                     : mod.mixinTargets().size() + " classes patched"
                       + (mod.overwriteTargets().isEmpty() ? "" : ", " + mod.overwriteTargets().size() + " overwritten");
-            System.out.printf("  %-12s %-26s %-24s %s%n", mod.kind(), mod.label(),
-                    mod.version() != null ? mod.version() : "", patches);
+            // Some jars ship an unexpanded build placeholder like ${file.jarVersion};
+            // the loader substitutes it at runtime, but printing it verbatim reads as a bug.
+            String version = mod.version();
+            if (version == null || version.contains("${")) {
+                version = "-";
+            }
+            System.out.printf("  %-12s %-26s %-24s %s%n", mod.kind(), mod.label(), version, patches);
         }
 
         List<Finding> findings = ConflictAnalyzer.analyze(mods, profile);

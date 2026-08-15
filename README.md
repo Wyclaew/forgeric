@@ -158,21 +158,25 @@ sadece geri kalanı için ihtiyacın var.
 ## Test için hangi modlar?
 
 Şu an Fabric API köprüsü olmadığı için **fabric-api gerektirmeyen** Fabric modları
-çalışabilir. 26.2 için Modrinth'ten doğrulanmış adaylar:
+çalışabilir. Aşağıdaki liste jar'ların içindeki `fabric.mod.json` okunarak
+doğrulandı (Modrinth'in gösterdiği bağımlılıklar her zaman doğru değil):
 
-| Mod | Ne yapar | Bağımlılık |
+| Mod | Ne yapar | Durum |
 |---|---|---|
-| `krypton` | Ağ katmanı optimizasyonu | yok |
-| `ferrite-core` | Bellek kullanımını düşürür | yok |
-| `debugify` | Mojang bug'larını düzeltir | yok |
-| `c2me-fabric` | Chunk yükleme paralelleştirme | yok |
-| `morechathistory` | Sohbet geçmişi | yok |
+| `krypton` | Ağ katmanı optimizasyonu | bağımlılık yok |
+| `ferrite-core` | Bellek kullanımını düşürür | bağımlılık yok |
+| `morechathistory` | Sohbet geçmişini uzatır | bağımlılık yok |
+| `placeholder-api` | Metin kütüphanesi | bağımlılık yok |
+| `c2me-fabric` | Chunk yükleme paralelleştirme | `c2me-base` gerekli (kendi içinde gelir), deneysel |
 
-Bunların yanına istediğin NeoForge modunu koyabilirsin (JEI, Jade, Xaero's vb.).
+İlk denemede `krypton` + `ferrite-core` ile başla — ikisi de saf Mixin, en temiz test.
 
-**Çalışmayacaklar** (fabric-api gerektiriyor): `sodium`, `iris`, `lithium`,
-`entityculling`, `modmenu`, `continuity`, `zoomify`. Bunların çoğunun zaten
-NeoForge sürümü var — onu kullan.
+Yanlarına istediğin NeoForge modunu koyabilirsin (JEI, Jade, Xaero's vb.).
+
+**Çalışmayacaklar** — hepsi Fabric API modüllerine bağlı: `sodium`, `iris`,
+`lithium`, `entityculling`, `modmenu`, `continuity`, `zoomify`, `debugify`,
+`malilib`, `litematica`, `language-reload`. Çoğunun zaten NeoForge sürümü var,
+onu kullan. Emin değilsen `doctor` sana söyler.
 
 ---
 
